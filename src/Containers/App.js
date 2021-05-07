@@ -4,6 +4,7 @@ import CardList from "../Components/CardList";
 import SearchBox from "../Components/SearchBox";
 import './App.css';
 import Scroll from "../Components/Scroll";
+import ErrorBoundary from "../Components/ErrorBoundary";
 
 		//smart component if it typically has class syntax
 class App extends Component{ //dapat class na pag may state
@@ -38,12 +39,10 @@ class App extends Component{ //dapat class na pag may state
 	}
 
 	render(){ //laging may render ang class
-		const{ robots, searchField} = this.state; //to make it cleaner
-
-		const filteredRobots = robots.filter(robot =>{ //each item is a robot user, parang for each
-			return robot.name.toLowerCase().includes(searchField.toLowerCase()) //this basically compares all the name of the robots on the array to the searchField attribute of the state, toLower to remove capitalization. includes is a method of a string
+		const filteredRobots = this.state.robots.filter(robots =>{
+			return robots.name.toLowerCase().includes(this.state.searchField.toLowerCase()) //this basically compares all the name of the robots on the array to the searchField attribute of the state, toLower to remove capitalization. includes is a method of a string
 		}); //alter mo yung state ng robot attribute depending on the kayword in the searchbar
-		if (!robots.length){ //if its taking long to load the robot (basically if robots.length === 0)
+		if (this.state.robots.length === 0){ //if its taking long to load the robot
 			return <h1 className="tc">Loading</h1> //put here a loading bar while you get data in server
 		}else{ //if it is loaded
 			console.log(filteredRobots); //filtered robots is the array of objects of array that is being filtered according to the searchbar
@@ -53,11 +52,13 @@ class App extends Component{ //dapat class na pag may state
 					<SearchBox searchChange={this.onSearchChange}/>{/* this because class na, basically passing the method on search chaneg*/}
 					{/*<CardList robots={this.state.robots}/>{ access robots from the state and it becomes a prop}*/}
 					<Scroll> {/*wrap my carlist in scroll so it can be scrollable*/}
-						<CardList robots={filteredRobots}/> {/*now pass the updated filtered robots here instead of this.state.robots*/}
+						<ErrorBoundary> {/*wrap this with error boundary so there is something that will show when an error occurs on cardlist*/}
+							<CardList robots={filteredRobots}/> {/*now pass the updated filtered robots here instead of this.state.robots*/}
+						</ErrorBoundary>
 					</Scroll> {/*carlist will be the child of scroll that can be accessed in the props*/}
 				</div>
 			);
-		} //can make if else into ternary
+		}
 		
 
 	}
@@ -65,8 +66,6 @@ class App extends Component{ //dapat class na pag may state
 }
 
 export default App;
-
-//npm run build to create the most efficient build to be deployed anywhere
 
 //lifecycle are built in methods react that can be used 
 
