@@ -2,9 +2,9 @@ import React from "react";
 import Card from './Card';
 
 const CardList = ({robots}) =>{ //returns the multiple card children object. This is the parent
-	if(true){
-		throw new Error("NOOO!"); //throw an error
-	}
+	// if(true){
+	// 	throw new Error("NOOO!"); //throw an error
+	// }
 	const cardComponent = robots.map((user,i) =>{ //loop na parang for each, user gets per object and 2nd parameter is index 
 		return <Card 
 			key={user.id} 
